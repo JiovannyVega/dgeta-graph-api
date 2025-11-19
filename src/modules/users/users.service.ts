@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityRepository } from '@mikro-orm/core';
 import { User } from './entities/user.entity';
@@ -23,6 +23,14 @@ export class UsersService {
     }
 
     async create(input: { username: string; password: string; email: string; roleId: number }) {
+        // check for existing username/email and fail early with clear message
+        const existing = await this.repo.findOne({ $or: [{ username: input.username }, { email: input.email }] });
+        if (existing) {
+            if (existing.username === input.username) throw new BadRequestException('username already exists');
+            if (existing.email === input.email) throw new BadRequestException('email already exists');
+            // fallback
+            throw new BadRequestException('user already exists');
+        }
         const role = await this.roleRepo.findOne({ role_id: input.roleId });
         if (!role) throw new NotFoundException('role not found');
         const hashed = await bcrypt.hash(input.password, 10);

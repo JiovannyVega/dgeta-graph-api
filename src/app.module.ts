@@ -9,8 +9,10 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { defineConfig, MySqlDriver } from '@mikro-orm/mysql';
 import { RolesModule } from './modules/roles/roles.module';
 import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { User } from './modules/users/entities/user.entity';
 import { Role } from './modules/roles/entities/role.entity';
+import { RefreshToken } from './modules/auth/entities/refresh-token.entity';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 @Module({
@@ -40,7 +42,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
           password: db?.password,
           dbName: db?.dbName,
           // provide entity classes explicitly so discovery works under ts-node
-          entities: [Role, User],
+          entities: [Role, User, RefreshToken],
           allowGlobalContext: true,
           debug: configService.get('NODE_ENV') !== 'production',
         } as any);
@@ -56,6 +58,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
     }),
     RolesModule,
     UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule { }
