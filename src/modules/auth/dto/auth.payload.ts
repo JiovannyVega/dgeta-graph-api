@@ -6,8 +6,8 @@ export class AuthPayload {
     @Field()
     accessToken!: string;
 
-    @Field()
-    refreshToken!: string;
+    @Field({ nullable: true })
+    refreshToken?: string;
 
     @Field(() => User)
     user!: User;

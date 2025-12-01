@@ -52,6 +52,9 @@ export class AuthService {
         const user = await this.validateUserByCredentials(username, password);
         if (!user) throw new UnauthorizedException('Invalid credentials');
 
+        // Update last login timestamp
+        user.last_login = new Date();
+
         const accessToken = await this.generateAccessToken(user);
         const { token: refreshToken, expiresSeconds } = await this.generateRefreshToken(user);
 
@@ -62,7 +65,7 @@ export class AuthService {
         rt.expires_at = new Date(rt.created_at.getTime() + expiresSeconds * 1000);
         await this.refreshRepo.getEntityManager().persistAndFlush(rt);
 
-        return { accessToken, refreshToken, user };
+        return { accessToken, refreshToken, expiresSeconds, user };
     }
 
     async refresh(oldToken: string) {
@@ -74,7 +77,7 @@ export class AuthService {
             const sub = payload.sub;
             if (!sub) throw new UnauthorizedException('Invalid token payload');
 
-            const stored = await this.refreshRepo.findOne({ token: oldToken }, { populate: ['user'] });
+            const stored = await this.refreshRepo.findOne({ token: oldToken }, { populate: ['user', 'user.role'] });
             if (!stored || stored.revoked) throw new UnauthorizedException('Refresh token revoked or not found');
 
             // Optionally rotate: revoke old and create new
@@ -92,7 +95,7 @@ export class AuthService {
             newRt.expires_at = new Date(newRt.created_at.getTime() + expiresSeconds * 1000);
             await this.refreshRepo.getEntityManager().persistAndFlush(newRt);
 
-            return { accessToken, refreshToken, user };
+            return { accessToken, refreshToken, expiresSeconds, user };
         } catch (err) {
             throw new UnauthorizedException('Invalid refresh token');
         }
@@ -118,6 +121,6 @@ export class AuthService {
         rt.expires_at = new Date(rt.created_at.getTime() + expiresSeconds * 1000);
         await this.refreshRepo.getEntityManager().persistAndFlush(rt);
 
-        return { accessToken, refreshToken, user };
+        return { accessToken, refreshToken, expiresSeconds, user };
     }
 }

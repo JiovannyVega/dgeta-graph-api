@@ -15,11 +15,11 @@ export class UsersService {
     ) { }
 
     findAll() {
-        return this.repo.findAll();
+        return this.repo.findAll({ populate: ['role'] });
     }
 
     findOne(id: number) {
-        return this.repo.findOne({ user_id: id });
+        return this.repo.findOne({ user_id: id }, { populate: ['role'] });
     }
 
     async create(input: { username: string; password: string; email: string; roleId: number }) {

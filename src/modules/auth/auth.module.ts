@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
+import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshToken } from './entities/refresh-token.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersModule } from '../users/users.module';
@@ -12,6 +14,7 @@ import { parseDurationToSeconds } from '../../utils/time.util';
 @Module({
     imports: [
         ConfigModule,
+        PassportModule.register({ defaultStrategy: 'jwt' }),
         JwtModule.registerAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
@@ -26,7 +29,7 @@ import { parseDurationToSeconds } from '../../utils/time.util';
         MikroOrmModule.forFeature([RefreshToken, User]),
         UsersModule,
     ],
-    providers: [AuthService, AuthResolver],
-    exports: [AuthService],
+    providers: [AuthService, AuthResolver, JwtStrategy],
+    exports: [AuthService, PassportModule, JwtStrategy],
 })
 export class AuthModule { }

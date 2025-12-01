@@ -219,13 +219,13 @@
         },
         "token": {
           "name": "token",
-          "type": "text",
+          "type": "varchar(500)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": null,
-          "mappedType": "text"
+          "length": 500,
+          "mappedType": "string"
         },
         "user_user_id": {
           "name": "user_user_id",

@@ -26,7 +26,7 @@ export class User {
     email!: string;
 
     @Field({ nullable: true })
-    @Property({ nullable: true })
+    @Property({ nullable: true, onCreate: () => new Date() })
     registered_at?: Date;
 
     @Field({ nullable: true })

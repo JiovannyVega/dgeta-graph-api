@@ -10,7 +10,7 @@ export class RefreshToken {
     id!: number;
 
     @Field()
-    @Property({ unique: true, columnType: 'text' })
+    @Property({ unique: true, columnType: 'varchar(500)' })
     token!: string;
 
     @Field(() => User)
