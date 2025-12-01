@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { LoginInput } from './dto/login.input';
 import { RegisterInput } from './dto/register.input';
 import { AuthPayload } from './dto/auth.payload';
-import { Public } from './decorators/public.decorator';
+import { Public } from '../../common/decorators/public.decorator';
 
 @Resolver()
 export class AuthResolver {
