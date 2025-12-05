@@ -20,6 +20,7 @@ import { State } from './modules/states/entities/state.entity';
 import { Municipality } from './modules/municipalities/entities/municipality.entity';
 import { GqlAuthGuard } from './common/guards/gql-auth.guard';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import depthLimit from 'graphql-depth-limit';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
       autoSchemaFile: 'schema.gql',
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      validationRules: [depthLimit(5)], // Limit query depth to 5 levels
       context: ({ req, res }) => ({ req, res, session: req.session }),
     }),
     RolesModule,

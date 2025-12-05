@@ -38,7 +38,8 @@ type Municipality {
 type State {
   state_id: ID!
   name: String!
-  code: String
+  code: Float
+  abbreviation: String
   municipalities: [Municipality!]
 }
 
