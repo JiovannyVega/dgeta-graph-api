@@ -29,11 +29,28 @@ type AuthPayload {
   user: User!
 }
 
+type Municipality {
+  municipality_id: ID!
+  state: State!
+  name: String!
+}
+
+type State {
+  state_id: ID!
+  name: String!
+  code: String
+  municipalities: [Municipality!]
+}
+
 type Query {
   roles: [Role!]!
   role(id: Int!): Role
   users: [User!]!
   user(id: Int!): User
+  states: [State!]!
+  state(id: Int!): State
+  municipalities(stateId: Int): [Municipality!]!
+  municipality(id: Int!): Municipality
 }
 
 type Mutation {

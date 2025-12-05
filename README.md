@@ -57,6 +57,50 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
+## Database Migrations & Seeders
+
+This project uses MikroORM for database migrations and seeders.
+
+### Setup Database
+
+1. Configure your database connection in `.env`:
+```bash
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=dgeta
+```
+
+### Run Migrations
+
+```bash
+# Create a new migration (auto-generates based on entity changes)
+$ yarn mikro:migration:create
+
+# Run pending migrations
+$ yarn mikro:migration:up
+
+# Rollback last migration (if needed)
+$ npx mikro-orm migration:down
+```
+
+### Run Seeders
+
+```bash
+# Run all seeders (populates database with initial data)
+$ yarn seed:run
+
+# Run a specific seeder
+$ npx mikro-orm seeder:run --class=StatesSeeder
+
+# Create a new seeder
+$ yarn seed:create MySeeder
+```
+
+> **Note**: Seeders populate the database with initial data like states, municipalities, and roles.
+
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.

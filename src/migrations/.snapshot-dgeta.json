@@ -63,6 +63,139 @@
     },
     {
       "columns": {
+        "state_id": {
+          "name": "state_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "length": null,
+          "mappedType": "integer"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 100,
+          "mappedType": "string"
+        },
+        "code": {
+          "name": "code",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": null,
+          "mappedType": "integer"
+        },
+        "abbreviation": {
+          "name": "abbreviation",
+          "type": "varchar(5)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 5,
+          "mappedType": "string"
+        }
+      },
+      "name": "states",
+      "indexes": [
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "state_id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {},
+      "nativeEnums": {}
+    },
+    {
+      "columns": {
+        "municipality_id": {
+          "name": "municipality_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "length": null,
+          "mappedType": "integer"
+        },
+        "state_state_id": {
+          "name": "state_state_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": null,
+          "mappedType": "integer"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 100,
+          "mappedType": "string"
+        }
+      },
+      "name": "municipalities",
+      "indexes": [
+        {
+          "columnNames": [
+            "state_state_id"
+          ],
+          "composite": false,
+          "keyName": "municipalities_state_state_id_index",
+          "constraint": false,
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "municipality_id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "municipalities_state_state_id_foreign": {
+          "constraintName": "municipalities_state_state_id_foreign",
+          "columnNames": [
+            "state_state_id"
+          ],
+          "localTableName": "municipalities",
+          "referencedColumnNames": [
+            "state_id"
+          ],
+          "referencedTableName": "states",
+          "updateRule": "cascade"
+        }
+      },
+      "nativeEnums": {}
+    },
+    {
+      "columns": {
         "user_id": {
           "name": "user_id",
           "type": "int",

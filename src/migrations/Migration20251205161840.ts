@@ -1,10 +1,15 @@
 import { Migration } from '@mikro-orm/migrations';
 
-export class Migration20251201041618 extends Migration {
+export class Migration20251205161840 extends Migration {
 
   override async up(): Promise<void> {
     this.addSql(`create table \`roles\` (\`role_id\` int unsigned not null auto_increment primary key, \`role_name\` varchar(255) not null, \`description\` text null) default character set utf8mb4 engine = InnoDB;`);
     this.addSql(`alter table \`roles\` add unique \`roles_role_name_unique\`(\`role_name\`);`);
+
+    this.addSql(`create table \`states\` (\`state_id\` int unsigned not null auto_increment primary key, \`name\` varchar(100) not null, \`code\` int null, \`abbreviation\` varchar(5) null) default character set utf8mb4 engine = InnoDB;`);
+
+    this.addSql(`create table \`municipalities\` (\`municipality_id\` int unsigned not null auto_increment primary key, \`state_state_id\` int unsigned not null, \`name\` varchar(100) not null) default character set utf8mb4 engine = InnoDB;`);
+    this.addSql(`alter table \`municipalities\` add index \`municipalities_state_state_id_index\`(\`state_state_id\`);`);
 
     this.addSql(`create table \`users\` (\`user_id\` int unsigned not null auto_increment primary key, \`role_role_id\` int unsigned not null, \`username\` varchar(255) not null, \`password_hash\` varchar(255) not null, \`email\` varchar(255) not null, \`registered_at\` datetime null, \`last_login\` datetime null, \`active\` tinyint(1) not null default true) default character set utf8mb4 engine = InnoDB;`);
     this.addSql(`alter table \`users\` add index \`users_role_role_id_index\`(\`role_role_id\`);`);
@@ -15,6 +20,8 @@ export class Migration20251201041618 extends Migration {
     this.addSql(`alter table \`refresh_tokens\` add unique \`refresh_tokens_token_unique\`(\`token\`);`);
     this.addSql(`alter table \`refresh_tokens\` add index \`refresh_tokens_user_user_id_index\`(\`user_user_id\`);`);
 
+    this.addSql(`alter table \`municipalities\` add constraint \`municipalities_state_state_id_foreign\` foreign key (\`state_state_id\`) references \`states\` (\`state_id\`) on update cascade;`);
+
     this.addSql(`alter table \`users\` add constraint \`users_role_role_id_foreign\` foreign key (\`role_role_id\`) references \`roles\` (\`role_id\`) on update cascade;`);
 
     this.addSql(`alter table \`refresh_tokens\` add constraint \`refresh_tokens_user_user_id_foreign\` foreign key (\`user_user_id\`) references \`users\` (\`user_id\`) on update cascade;`);
@@ -23,9 +30,15 @@ export class Migration20251201041618 extends Migration {
   override async down(): Promise<void> {
     this.addSql(`alter table \`users\` drop foreign key \`users_role_role_id_foreign\`;`);
 
+    this.addSql(`alter table \`municipalities\` drop foreign key \`municipalities_state_state_id_foreign\`;`);
+
     this.addSql(`alter table \`refresh_tokens\` drop foreign key \`refresh_tokens_user_user_id_foreign\`;`);
 
     this.addSql(`drop table if exists \`roles\`;`);
+
+    this.addSql(`drop table if exists \`states\`;`);
+
+    this.addSql(`drop table if exists \`municipalities\`;`);
 
     this.addSql(`drop table if exists \`users\`;`);
 

@@ -11,9 +11,13 @@ import { defineConfig, MySqlDriver } from '@mikro-orm/mysql';
 import { RolesModule } from './modules/roles/roles.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { StatesModule } from './modules/states/states.module';
+import { MunicipalitiesModule } from './modules/municipalities/municipalities.module';
 import { User } from './modules/users/entities/user.entity';
 import { Role } from './modules/roles/entities/role.entity';
 import { RefreshToken } from './modules/auth/entities/refresh-token.entity';
+import { State } from './modules/states/entities/state.entity';
+import { Municipality } from './modules/municipalities/entities/municipality.entity';
 import { GqlAuthGuard } from './common/guards/gql-auth.guard';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
@@ -44,7 +48,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
           password: db?.password,
           dbName: db?.dbName,
           // provide entity classes explicitly so discovery works under ts-node
-          entities: [Role, User, RefreshToken],
+          entities: [Role, User, RefreshToken, State, Municipality],
           allowGlobalContext: true,
           debug: configService.get('NODE_ENV') !== 'production',
         } as any);
@@ -61,6 +65,8 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
     RolesModule,
     UsersModule,
     AuthModule,
+    StatesModule,
+    MunicipalitiesModule,
   ],
   providers: [
     {
